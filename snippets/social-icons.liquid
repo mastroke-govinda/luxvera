@@ -1,0 +1,45 @@
+{%- liquid
+  assign has_social = false
+  if settings.social_instagram_link != blank or settings.social_facebook_link != blank or settings.social_tiktok_link != blank or settings.social_youtube_link != blank or settings.social_x_link != blank
+    assign has_social = true
+  endif
+-%}
+{%- if has_social -%}
+  <ul class="social-icons" role="list" aria-label="{{ 'sections.footer.follow_on_social' | t }}">
+    {%- if settings.social_instagram_link != blank -%}
+      <li>
+        <a href="{{ settings.social_instagram_link }}" class="social-icons__link" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
+          {%- render 'icon-instagram' -%}
+        </a>
+      </li>
+    {%- endif -%}
+    {%- if settings.social_facebook_link != blank -%}
+      <li>
+        <a href="{{ settings.social_facebook_link }}" class="social-icons__link" aria-label="Facebook" target="_blank" rel="noopener noreferrer">
+          {%- render 'icon-facebook' -%}
+        </a>
+      </li>
+    {%- endif -%}
+    {%- if settings.social_tiktok_link != blank -%}
+      <li>
+        <a href="{{ settings.social_tiktok_link }}" class="social-icons__link" aria-label="TikTok" target="_blank" rel="noopener noreferrer">
+          {%- render 'icon-tiktok' -%}
+        </a>
+      </li>
+    {%- endif -%}
+    {%- if settings.social_youtube_link != blank -%}
+      <li>
+        <a href="{{ settings.social_youtube_link }}" class="social-icons__link" aria-label="YouTube" target="_blank" rel="noopener noreferrer">
+          {%- render 'icon-youtube' -%}
+        </a>
+      </li>
+    {%- endif -%}
+    {%- if settings.social_x_link != blank -%}
+      <li>
+        <a href="{{ settings.social_x_link }}" class="social-icons__link" aria-label="X" target="_blank" rel="noopener noreferrer">
+          {%- render 'icon-x' -%}
+        </a>
+      </li>
+    {%- endif -%}
+  </ul>
+{%- endif -%}

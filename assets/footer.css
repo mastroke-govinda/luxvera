@@ -1,0 +1,225 @@
+/* ============================================================
+   FOOTER
+   Full-width bar; inner content constrained by .page-width
+   ============================================================ */
+.footer {
+  border-top: 0.1rem solid rgba(var(--color-foreground), 0.08);
+}
+
+/* ============================================================
+   BLOCKS GRID
+   auto-fill so any number of columns works without Liquid math.
+   ============================================================ */
+.footer__main {
+  padding: 5rem 0 4rem;
+}
+
+.footer__blocks {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3.5rem 3rem;
+}
+
+@media screen and (min-width: 750px) {
+  .footer__blocks {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .footer__blocks {
+    grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+  }
+}
+
+/* ============================================================
+   BRAND BLOCK
+   ============================================================ */
+.footer__block--brand {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+}
+
+.footer__brand-logo {
+  display: inline-block;
+  text-decoration: none;
+}
+
+.footer__brand-logo img {
+  width: var(--footer-logo-width, 12rem);
+  height: auto;
+  display: block;
+}
+
+.footer__brand-name {
+  font-size: 2rem;
+  font-weight: 700;
+  text-decoration: none;
+  letter-spacing: 0.06em;
+  color: inherit;
+}
+
+.footer__brand-description {
+  font-size: 1.4rem;
+  line-height: 1.6;
+  opacity: 0.8;
+  margin: 0;
+  max-width: 30rem;
+}
+
+/* ============================================================
+   BLOCK HEADING
+   ============================================================ */
+.footer__block-heading {
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin: 0 0 1.4rem;
+}
+
+/* ============================================================
+   LINK LIST BLOCK
+   ============================================================ */
+.footer__menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.footer__link {
+  font-size: 1.4rem;
+  text-decoration: none;
+  color: inherit;
+  opacity: 0.75;
+  transition: opacity var(--duration-default, 0.15s);
+}
+
+.footer__link:hover,
+.footer__link:focus-visible {
+  opacity: 1;
+}
+
+/* ============================================================
+   TEXT BLOCK
+   ============================================================ */
+.footer__block.rte {
+  font-size: 1.4rem;
+  line-height: 1.6;
+}
+
+.footer__block.rte p { margin: 0 0 0.8rem; }
+.footer__block.rte p:last-child { margin-bottom: 0; }
+
+/* ============================================================
+   NEWSLETTER BLOCK
+   ============================================================ */
+.footer__newsletter-subtext {
+  font-size: 1.4rem;
+  opacity: 0.8;
+  margin: 0 0 1.6rem;
+}
+
+.footer__newsletter-field {
+  display: flex;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.footer__newsletter-field input[type="email"] {
+  flex: 1 1 16rem;
+  min-width: 0;
+}
+
+.footer__newsletter-field .button {
+  min-width: 0;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.footer__newsletter-form .form__message {
+  margin-top: 1.2rem;
+}
+
+/* ============================================================
+   SOCIAL ICONS
+   ============================================================ */
+.social-icons {
+  display: flex;
+  gap: 0.8rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex-wrap: wrap;
+}
+
+.social-icons__link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.6rem;
+  height: 3.6rem;
+  border-radius: var(--buttons-radius, 0.4rem);
+  border: 0.1rem solid rgba(var(--color-foreground), 0.2);
+  color: inherit;
+  text-decoration: none;
+  transition: background var(--duration-default, 0.15s),
+              border-color var(--duration-default, 0.15s);
+}
+
+.social-icons__link:hover,
+.social-icons__link:focus-visible {
+  background: rgba(var(--color-foreground), 0.08);
+  border-color: rgba(var(--color-foreground), 0.4);
+}
+
+.social-icons__link svg {
+  width: 1.6rem;
+  height: 1.6rem;
+}
+
+/* ============================================================
+   BOTTOM BAR
+   ============================================================ */
+.footer__bottom {
+  border-top: 0.1rem solid rgba(var(--color-foreground), 0.08);
+  padding: 2rem 0;
+}
+
+.footer__bottom-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.2rem;
+}
+
+.footer__copyright {
+  font-size: 1.3rem;
+  opacity: 0.7;
+}
+
+/* ============================================================
+   PAYMENT ICONS
+   ============================================================ */
+.footer__payment-icons {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.footer__payment-icons svg,
+.footer__payment-icons img {
+  height: 2.4rem;
+  width: auto;
+  display: block;
+}

@@ -9,6 +9,44 @@
         "menu": { "label": "Menu" },
         "color_scheme": { "label": "Color scheme" }
       }
+    },
+    "footer": {
+      "name": "Footer",
+      "blocks": {
+        "brand": {
+          "name": "Brand",
+          "settings": {
+            "logo": { "label": "Logo image" },
+            "logo_width": { "label": "Logo width" },
+            "description": { "label": "Short description" },
+            "show_social": { "label": "Show social icons" }
+          }
+        },
+        "link_list": {
+          "name": "Navigation",
+          "settings": {
+            "heading": { "label": "Heading" },
+            "menu": { "label": "Menu" }
+          }
+        },
+        "text": {
+          "name": "Text",
+          "settings": {
+            "heading": { "label": "Heading" },
+            "text": { "label": "Text" }
+          }
+        },
+        "newsletter": {
+          "name": "Email signup",
+          "settings": {
+            "heading": { "label": "Heading" },
+            "subtext": { "label": "Subtext" }
+          }
+        }
+      },
+      "settings": {
+        "color_scheme": { "label": "Color scheme" }
+      }
     }
   },
   "settings_schema": {

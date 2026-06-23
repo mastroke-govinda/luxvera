@@ -8,9 +8,14 @@
         "color_scheme": "scheme-1"
       },
       "blocks": {
-        "menu-1": { "type": "menu", "settings": { "heading": "Quick links" } }
+        "link-list-1": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Quick links"
+          }
+        }
       },
-      "block_order": ["menu-1"]
+      "block_order": ["link-list-1"]
     }
   },
   "order": ["footer"]
