@@ -1,0 +1,354 @@
+{{ 'hero-banner.css' | asset_url | stylesheet_tag }}
+{{ 'hero-banner.js' | asset_url | script_tag }}
+
+{%- liquid
+  assign slide_blocks = section.blocks | where: 'type', 'slide'
+  assign has_slides   = slide_blocks.size > 0
+
+  case section.settings.content_alignment
+    when 'left'
+      assign hero_flex_align = 'flex-start'
+    when 'center'
+      assign hero_flex_align = 'center'
+    when 'right'
+      assign hero_flex_align = 'flex-end'
+    else
+      assign hero_flex_align = 'flex-start'
+  endcase
+-%}
+
+<hero-banner
+  id="hero-banner-{{ section.id }}"
+  class="hero-banner"
+  aria-label="{{ 'sections.hero_banner.aria_label' | t }}"
+  data-autoplay="{{ section.settings.autoplay }}"
+  data-speed="{{ section.settings.autoplay_speed | times: 1000 }}"
+  style="
+    --hero-height-desktop: {{ section.settings.height_desktop }}px;
+    --hero-height-tablet:  {{ section.settings.height_tablet }}px;
+    --hero-height-mobile:  {{ section.settings.height_mobile }}px;
+    --hero-heading-size:   {{ section.settings.heading_size }}px;
+    --hero-text-align:     {{ section.settings.content_alignment }};
+    --hero-flex-align:     {{ hero_flex_align }};
+  "
+>
+
+  {%- if has_slides -%}
+
+    <ul class="hero-banner__slides" aria-live="polite">
+      {%- for block in slide_blocks -%}
+        {%- assign is_first = forloop.index0 == 0 -%}
+        <li
+          class="hero-banner__slide{% if is_first %} is-active animate-in{% endif %}"
+          data-index="{{ forloop.index0 }}"
+          aria-hidden="{% if is_first %}false{% else %}true{% endif %}"
+          {{ block.shopify_attributes }}
+          style="
+            --slide-overlay-color:   {{ block.settings.overlay_color }};
+            --slide-overlay-opacity: {{ block.settings.overlay_opacity | divided_by: 100.0 }};
+          "
+        >
+          <div class="hero-banner__bg">
+            {%- if block.settings.image != blank -%}
+              {{
+                block.settings.image
+                | image_url: width: 1920
+                | image_tag:
+                  class: 'hero-banner__img',
+                  alt: block.settings.image.alt | escape,
+                  loading: is_first | default: 'lazy',
+                  width: block.settings.image.width,
+                  height: block.settings.image.height
+              }}
+            {%- else -%}
+              <div class="hero-banner__placeholder">
+                {{- 'lifestyle-' | append: forloop.index | placeholder_svg_tag -}}
+              </div>
+            {%- endif -%}
+            <div class="hero-banner__overlay" aria-hidden="true"></div>
+          </div>
+
+          <div class="hero-banner__content color-{{ section.settings.color_scheme }}">
+            {%- if block.settings.heading != blank -%}
+              {%- if template.name == 'index' and is_first -%}
+                <h1 class="hero-banner__heading">{{ block.settings.heading | escape }}</h1>
+              {%- else -%}
+                <h2 class="hero-banner__heading">{{ block.settings.heading | escape }}</h2>
+              {%- endif -%}
+            {%- endif -%}
+
+            {%- if block.settings.subheading != blank -%}
+              <p class="hero-banner__subtext">{{ block.settings.subheading | escape }}</p>
+            {%- endif -%}
+
+            {%- if block.settings.button_label != blank and block.settings.button_url != blank -%}
+              <a
+                href="{{ block.settings.button_url }}"
+                class="button"
+                {% if block.settings.button_new_tab %}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                {% endif %}
+              >{{ block.settings.button_label | escape }}</a>
+            {%- endif -%}
+          </div>
+        </li>
+      {%- endfor -%}
+    </ul>
+
+    {%- if slide_blocks.size > 1 -%}
+      <button
+        class="hero-banner__arrow hero-banner__arrow--prev"
+        aria-label="{{ 'sections.hero_banner.previous_slide' | t }}"
+        type="button"
+      >
+        <svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+      </button>
+
+      <button
+        class="hero-banner__arrow hero-banner__arrow--next"
+        aria-label="{{ 'sections.hero_banner.next_slide' | t }}"
+        type="button"
+      >
+        <svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"/>
+        </svg>
+      </button>
+
+      <div class="hero-banner__dots" role="tablist" aria-label="{{ 'sections.hero_banner.slide_navigation' | t }}">
+        {%- for block in slide_blocks -%}
+          <button
+            class="hero-banner__dot{% if forloop.index0 == 0 %} is-active{% endif %}"
+            type="button"
+            role="tab"
+            aria-selected="{% if forloop.index0 == 0 %}true{% else %}false{% endif %}"
+            aria-label="{{ 'sections.hero_banner.go_to_slide' | t: index: forloop.index }}"
+            data-index="{{ forloop.index0 }}"
+          ></button>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+  {%- else -%}
+
+    {%- comment -%} Empty state: visible only in the theme editor when no blocks added {%- endcomment -%}
+    <ul class="hero-banner__slides">
+      <li class="hero-banner__slide hero-banner__slide--empty is-active">
+        <div class="hero-banner__bg">
+          <div class="hero-banner__placeholder">
+            {{- 'lifestyle-1' | placeholder_svg_tag -}}
+          </div>
+          <div class="hero-banner__overlay" aria-hidden="true" style="--slide-overlay-color:#100a04;--slide-overlay-opacity:0.5;"></div>
+        </div>
+        <div class="hero-banner__content color-{{ section.settings.color_scheme }}">
+          <h2 class="hero-banner__heading">{{ 'sections.hero_banner.empty_heading' | t }}</h2>
+          <p class="hero-banner__subtext">{{ 'sections.hero_banner.empty_subtext' | t }}</p>
+        </div>
+      </li>
+    </ul>
+
+  {%- endif -%}
+
+</hero-banner>
+
+{% schema %}
+{
+  "name": "t:sections.hero_banner.name",
+  "tag": "section",
+  "limit": 1,
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "default": "scheme-1",
+      "label": "t:sections.hero_banner.settings.color_scheme.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.hero_banner.settings.header__height.content"
+    },
+    {
+      "type": "range",
+      "id": "height_desktop",
+      "min": 200,
+      "max": 900,
+      "step": 10,
+      "unit": "px",
+      "default": 580,
+      "label": "t:sections.hero_banner.settings.height_desktop.label"
+    },
+    {
+      "type": "range",
+      "id": "height_tablet",
+      "min": 200,
+      "max": 700,
+      "step": 10,
+      "unit": "px",
+      "default": 420,
+      "label": "t:sections.hero_banner.settings.height_tablet.label"
+    },
+    {
+      "type": "range",
+      "id": "height_mobile",
+      "min": 200,
+      "max": 600,
+      "step": 10,
+      "unit": "px",
+      "default": 360,
+      "label": "t:sections.hero_banner.settings.height_mobile.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.hero_banner.settings.header__content.content"
+    },
+    {
+      "type": "select",
+      "id": "content_alignment",
+      "default": "left",
+      "label": "t:sections.hero_banner.settings.content_alignment.label",
+      "options": [
+        {
+          "value": "left",
+          "label": "t:sections.hero_banner.settings.content_alignment.options__1.label"
+        },
+        {
+          "value": "center",
+          "label": "t:sections.hero_banner.settings.content_alignment.options__2.label"
+        },
+        {
+          "value": "right",
+          "label": "t:sections.hero_banner.settings.content_alignment.options__3.label"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 28,
+      "max": 96,
+      "step": 2,
+      "unit": "px",
+      "default": 48,
+      "label": "t:sections.hero_banner.settings.heading_size.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.hero_banner.settings.header__autoplay.content"
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "default": false,
+      "label": "t:sections.hero_banner.settings.autoplay.label"
+    },
+    {
+      "type": "range",
+      "id": "autoplay_speed",
+      "min": 3,
+      "max": 10,
+      "step": 1,
+      "unit": "s",
+      "default": 5,
+      "label": "t:sections.hero_banner.settings.autoplay_speed.label"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "t:sections.hero_banner.blocks.slide.name",
+      "settings": [
+        {
+          "type": "header",
+          "content": "t:sections.hero_banner.blocks.slide.settings.header__background.content"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "t:sections.hero_banner.blocks.slide.settings.image.label",
+          "info": "t:sections.hero_banner.blocks.slide.settings.image.info"
+        },
+        {
+          "type": "color",
+          "id": "overlay_color",
+          "default": "#100a04",
+          "label": "t:sections.hero_banner.blocks.slide.settings.overlay_color.label"
+        },
+        {
+          "type": "range",
+          "id": "overlay_opacity",
+          "min": 0,
+          "max": 100,
+          "step": 5,
+          "unit": "%",
+          "default": 50,
+          "label": "t:sections.hero_banner.blocks.slide.settings.overlay_opacity.label"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.hero_banner.blocks.slide.settings.header__content.content"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "default": "Your Heading Here",
+          "label": "t:sections.hero_banner.blocks.slide.settings.heading.label"
+        },
+        {
+          "type": "textarea",
+          "id": "subheading",
+          "label": "t:sections.hero_banner.blocks.slide.settings.subheading.label"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.hero_banner.blocks.slide.settings.header__button.content"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "t:sections.hero_banner.blocks.slide.settings.button_label.label"
+        },
+        {
+          "type": "url",
+          "id": "button_url",
+          "label": "t:sections.hero_banner.blocks.slide.settings.button_url.label"
+        },
+        {
+          "type": "checkbox",
+          "id": "button_new_tab",
+          "default": false,
+          "label": "t:sections.hero_banner.blocks.slide.settings.button_new_tab.label"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.hero_banner.presets.name",
+      "blocks": [
+        {
+          "type": "slide",
+          "settings": {
+            "heading": "Western Soul, Modern Style",
+            "subheading": "From laid-back daytime to summer nights — discover Western style crafted for you.",
+            "button_label": "Shop the Collection",
+            "button_url": "/collections/all",
+            "overlay_opacity": 55
+          }
+        },
+        {
+          "type": "slide",
+          "settings": {
+            "heading": "New Arrivals Are Here",
+            "subheading": "Explore our latest styles — fresh drops every week.",
+            "button_label": "Shop New Arrivals",
+            "button_url": "/collections/new-arrival",
+            "overlay_opacity": 55
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

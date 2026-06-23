@@ -1,0 +1,327 @@
+/* ============================================================
+   HERO BANNER — custom element base
+   ============================================================ */
+hero-banner {
+  display: block;
+  position: relative;
+  height: var(--hero-height-desktop, 58rem);
+  overflow: hidden;
+}
+
+/* ============================================================
+   SLIDES LIST
+   ============================================================ */
+.hero-banner__slides {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  height: 100%;
+}
+
+.hero-banner__slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.7s ease;
+  z-index: 0;
+}
+
+.hero-banner__slide.is-active {
+  opacity: 1;
+  pointer-events: auto;
+  z-index: 1;
+}
+
+/* ============================================================
+   BACKGROUND / IMAGE
+   ============================================================ */
+.hero-banner__bg {
+  position: absolute;
+  inset: 0;
+  background: rgb(var(--color-background, 17, 17, 17));
+}
+
+.hero-banner__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.hero-banner__placeholder {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.hero-banner__placeholder svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* ============================================================
+   OVERLAY
+   --slide-overlay-color and --slide-overlay-opacity (0–1)
+   are set per-slide inline. The gradient fades left→right.
+   Static rgba fallback for browsers without color-mix().
+   ============================================================ */
+.hero-banner__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  background: linear-gradient(
+    to right,
+    color-mix(
+      in srgb,
+      var(--slide-overlay-color, #100a04)
+        calc(var(--slide-overlay-opacity, 0.5) * 100%),
+      transparent
+    ) 30%,
+    color-mix(
+      in srgb,
+      var(--slide-overlay-color, #100a04)
+        calc(var(--slide-overlay-opacity, 0.5) * 15%),
+      transparent
+    ) 100%
+  );
+}
+
+/* ============================================================
+   CONTENT WRAPPER
+   color-scheme applied to this element; background must be
+   transparent so the slide image shows through.
+   ============================================================ */
+.hero-banner__content {
+  position: relative;
+  z-index: 2;
+  max-width: var(--page-width, 120rem);
+  margin: 0 auto;
+  padding: 0 5rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: var(--hero-flex-align, flex-start);
+  text-align: var(--hero-text-align, left);
+}
+
+/* Override color-scheme background — the slide image IS the background */
+.hero-banner__content[class*="color-scheme-"] {
+  background: transparent;
+}
+
+/* ============================================================
+   TYPOGRAPHY
+   Colors inherit from --color-foreground via the color scheme
+   applied to .hero-banner__content.
+   ============================================================ */
+.hero-banner__heading {
+  font-size: var(--hero-heading-size, 4.8rem);
+  font-weight: 500;
+  line-height: 1.15;
+  margin: 0 0 2rem;
+  max-width: 72rem;
+  color: rgb(var(--color-foreground));
+}
+
+.hero-banner__subtext {
+  font-size: 1.8rem;
+  font-weight: 400;
+  margin: 0;
+  max-width: 48rem;
+  opacity: 0.88;
+  line-height: 1.6;
+  color: rgb(var(--color-foreground));
+}
+
+/* ============================================================
+   BUTTON
+   .button from base.css handles size, padding, and color
+   (--color-button + --color-button-text from the scheme).
+   ============================================================ */
+.hero-banner__content .button {
+  margin-top: 3.2rem;
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   ARROWS
+   Always overlaid on an image → hardcoded semi-transparent white.
+   ============================================================ */
+.hero-banner__arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  width: 4.8rem;
+  height: 4.8rem;
+  border-radius: 50%;
+  border: 0.1rem solid rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+  transition: background var(--duration-default, 0.2s),
+              transform var(--duration-default, 0.2s);
+}
+
+.hero-banner__arrow:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-50%) scale(1.08);
+}
+
+.hero-banner__arrow:focus-visible {
+  outline: 0.2rem solid #fff;
+  outline-offset: 0.2rem;
+}
+
+.hero-banner__arrow--prev { left: 2.4rem; }
+.hero-banner__arrow--next { right: 2.4rem; }
+
+.hero-banner__arrow svg {
+  width: 2rem;
+  height: 2rem;
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   DOTS
+   ============================================================ */
+.hero-banner__dots {
+  position: absolute;
+  bottom: 2.4rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  gap: 0.8rem;
+  align-items: center;
+}
+
+.hero-banner__dot {
+  width: 0.8rem;
+  height: 0.8rem;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.45);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: background var(--duration-default, 0.2s),
+              transform var(--duration-default, 0.2s);
+}
+
+.hero-banner__dot.is-active {
+  background: #fff;
+  transform: scale(1.35);
+}
+
+.hero-banner__dot:focus-visible {
+  outline: 0.2rem solid #fff;
+  outline-offset: 0.2rem;
+}
+
+/* ============================================================
+   ENTRANCE ANIMATIONS
+   Triggered by .animate-in class added by JS (or Liquid for
+   the initial first slide). Staggered delays: heading → subtext
+   → button. Reflow trick in JS ensures re-entry replays them.
+   ============================================================ */
+@keyframes hero-fade-up {
+  from { opacity: 0; transform: translateY(2.2rem); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.hero-banner__slide.animate-in .hero-banner__heading {
+  animation: hero-fade-up 0.7s ease both;
+  animation-delay: 0.2s;
+}
+
+.hero-banner__slide.animate-in .hero-banner__subtext {
+  animation: hero-fade-up 0.7s ease both;
+  animation-delay: 0.38s;
+}
+
+.hero-banner__slide.animate-in .button {
+  animation: hero-fade-up 0.7s ease both;
+  animation-delay: 0.52s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-banner__slide {
+    transition: none;
+  }
+  .hero-banner__slide.animate-in .hero-banner__heading,
+  .hero-banner__slide.animate-in .hero-banner__subtext,
+  .hero-banner__slide.animate-in .button {
+    animation: none;
+  }
+}
+
+/* ============================================================
+   EMPTY STATE (theme editor, no blocks added)
+   ============================================================ */
+.hero-banner__slide--empty .hero-banner__content {
+  align-items: center;
+  text-align: center;
+}
+
+/* ============================================================
+   RESPONSIVE — tablet
+   ============================================================ */
+@media screen and (max-width: 989px) {
+  hero-banner {
+    height: var(--hero-height-tablet, 42rem);
+  }
+
+  .hero-banner__content {
+    padding: 0 2.8rem;
+  }
+
+  .hero-banner__arrow {
+    width: 4rem;
+    height: 4rem;
+  }
+
+  .hero-banner__arrow--prev { left: 1.2rem; }
+  .hero-banner__arrow--next { right: 1.2rem; }
+}
+
+/* ============================================================
+   RESPONSIVE — mobile
+   ============================================================ */
+@media screen and (max-width: 479px) {
+  hero-banner {
+    height: var(--hero-height-mobile, 36rem);
+  }
+
+  .hero-banner__content {
+    padding: 0 2rem;
+  }
+
+  .hero-banner__heading {
+    font-size: calc(var(--hero-heading-size, 4.8rem) * 0.65);
+    margin-bottom: 1.6rem;
+  }
+
+  .hero-banner__subtext {
+    font-size: 1.5rem;
+    line-height: 1.6;
+  }
+
+  .hero-banner__content .button {
+    width: 100%;
+    max-width: 28rem;
+    margin-top: 2.4rem;
+  }
+
+  .hero-banner__arrow {
+    display: none;
+  }
+}

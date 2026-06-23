@@ -79,6 +79,15 @@
       "payment": "Payment methods",
       "follow_on_social": "Follow us on social media"
     },
+    "hero_banner": {
+      "aria_label": "Hero banner slideshow",
+      "previous_slide": "Previous slide",
+      "next_slide": "Next slide",
+      "go_to_slide": "Go to slide {{ index }}",
+      "slide_navigation": "Slide navigation",
+      "empty_heading": "Add Your First Slide",
+      "empty_subtext": "Click \"Add block → Slide\" in the theme editor to get started."
+    },
     "cart": {
       "title": "Your cart",
       "empty": "Your cart is empty",
