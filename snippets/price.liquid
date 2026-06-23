@@ -1,0 +1,41 @@
+{%- liquid
+  if product.featured_media
+    assign target = product
+  elsif product
+    assign target = product
+  endif
+  assign price_target = target | default: product
+  assign use_variant_param = use_variant | default: false
+  if use_variant_param and product and product.selected_or_first_available_variant
+    assign current = product.selected_or_first_available_variant
+    assign price = current.price
+    assign compare = current.compare_at_price
+  else
+    assign price = price_target.price | default: placeholder_price | default: 0
+    assign compare = price_target.compare_at_price
+  endif
+  assign on_sale = false
+  if compare and compare > price
+    assign on_sale = true
+  endif
+  assign money_price = price | money
+  if settings.currency_code_enabled
+    assign money_price = price | money_with_currency
+  endif
+-%}
+<div class="price {% if on_sale %}price--on-sale{% endif %}">
+  <div class="price__container">
+    <div class="price__regular">
+      <span class="price__current">{{ money_price }}</span>
+    </div>
+    <div class="price__sale">
+      {%- if on_sale -%}
+        <span class="price__compare">
+          {%- if settings.currency_code_enabled -%}{{ compare | money_with_currency }}{%- else -%}{{ compare | money }}{%- endif -%}
+        </span>
+      {%- endif -%}
+      <span class="price__current">{{ money_price }}</span>
+      {%- if on_sale -%}<span class="badge badge--sale">{{ 'products.product.on_sale' | t }}</span>{%- endif -%}
+    </div>
+  </div>
+</div>

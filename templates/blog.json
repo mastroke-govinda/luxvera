@@ -1,0 +1,4 @@
+{
+  "sections": { "main": { "type": "main-blog", "settings": { "show_excerpt": true } } },
+  "order": ["main"]
+}

@@ -1,0 +1,40 @@
+<div class="customer account section page-width color-{{ section.settings.color_scheme }}">
+  <h1>{{ 'customer.account.title' | t }}</h1>
+  <a href="{{ routes.account_logout_url }}">{{ 'customer.log_out' | t }}</a>
+
+  <h2>{{ 'customer.orders.title' | t }}</h2>
+  {%- paginate customer.orders by 20 -%}
+    {%- if customer.orders.size > 0 -%}
+      <table>
+        <thead><tr>
+          <th>{{ 'customer.orders.order_number' | t }}</th>
+          <th>{{ 'customer.orders.date' | t }}</th>
+          <th>{{ 'customer.orders.payment_status' | t }}</th>
+          <th>{{ 'customer.orders.fulfillment_status' | t }}</th>
+          <th>{{ 'customer.orders.total' | t }}</th>
+        </tr></thead>
+        <tbody>
+          {%- for order in customer.orders -%}
+            <tr>
+              <td><a href="{{ order.customer_url }}">{{ order.name }}</a></td>
+              <td>{{ order.created_at | date: format: 'date' }}</td>
+              <td>{{ order.financial_status_label }}</td>
+              <td>{{ order.fulfillment_status_label }}</td>
+              <td>{{ order.total_net_amount | money_with_currency }}</td>
+            </tr>
+          {%- endfor -%}
+        </tbody>
+      </table>
+      {% render 'pagination', paginate: paginate %}
+    {%- else -%}
+      <p>{{ 'customer.orders.none' | t }}</p>
+    {%- endif -%}
+  {%- endpaginate -%}
+
+  <h2>{{ 'customer.account.details' | t }}</h2>
+  <div class="rte">{{ customer.default_address | format_address }}</div>
+  <a href="{{ routes.account_addresses_url }}">{{ 'customer.account.view_addresses' | t }} ({{ customer.addresses_count }})</a>
+</div>
+{% schema %}
+{ "name": "Account", "settings": [ { "type": "color_scheme", "id": "color_scheme", "default": "scheme-1", "label": "Color scheme" } ] }
+{% endschema %}

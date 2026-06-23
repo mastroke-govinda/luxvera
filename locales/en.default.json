@@ -1,0 +1,203 @@
+{
+  "general": {
+    "meta": {
+      "tags": "Tagged \"{{ tags }}\"",
+      "page": "Page {{ page }}"
+    },
+    "continue_shopping": "Continue shopping",
+    "pagination": {
+      "label": "Pagination",
+      "previous": "Previous page",
+      "next": "Next page",
+      "page": "Page {{ number }}"
+    },
+    "search": {
+      "search": "Search",
+      "placeholder": "Search"
+    },
+    "password_page": {
+      "password_label": "Password",
+      "password_placeholder": "Your password",
+      "submit": "Enter"
+    },
+    "comment_form": {
+      "name": "Name",
+      "email": "Email",
+      "message": "Message",
+      "post": "Post comment",
+      "success": "Your comment was posted successfully. Thank you!",
+      "error": "There was a problem posting your comment."
+    }
+  },
+  "accessibility": {
+    "skip_to_text": "Skip to content",
+    "close": "Close",
+    "refresh_page": "Choosing a selection results in a full page refresh.",
+    "link_messages": {
+      "new_window": "Opens in a new window."
+    }
+  },
+  "404": {
+    "title": "Page not found",
+    "subtext": "The page you were looking for does not exist."
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "Add to cart",
+      "sold_out": "Sold out",
+      "unavailable": "Unavailable",
+      "on_sale": "Sale",
+      "inventory_in_stock": "In stock",
+      "inventory_out_of_stock": "Out of stock",
+      "quantity": {
+        "label": "Quantity",
+        "increase": "Increase quantity for {{ product }}",
+        "decrease": "Decrease quantity for {{ product }}"
+      }
+    },
+    "facets": {
+      "apply": "Apply",
+      "to": "to",
+      "filter_and_sort": "Filter and sort",
+      "sort_by_label": "Sort by:",
+      "product_count": {
+        "one": "{{ product_count }} of {{ count }} product",
+        "other": "{{ product_count }} of {{ count }} products"
+      }
+    }
+  },
+  "sections": {
+    "cart": {
+      "title": "Your cart",
+      "empty": "Your cart is empty",
+      "remove": "Remove",
+      "note": "Order note",
+      "subtotal": "Subtotal",
+      "taxes_and_shipping_at_checkout": "Taxes and shipping calculated at checkout",
+      "checkout": "Check out",
+      "cart_error": "There was an error while updating your cart. Please try again.",
+      "cart_quantity_error_html": "You can only add {{ quantity }} of this item to your cart.",
+      "items_in_cart": {
+        "one": "{{ count }} item in cart",
+        "other": "{{ count }} items in cart"
+      },
+      "headings": {
+        "product": "Product",
+        "quantity": "Quantity",
+        "total": "Total"
+      }
+    },
+    "collection_template": {
+      "empty": "No products found",
+      "use_fewer_filters_html": "Use fewer filters or clear all"
+    }
+  },
+  "templates": {
+    "cart": {
+      "cart": "Cart"
+    },
+    "search": {
+      "title": "Search results",
+      "no_results": "No results found for \"{{ terms }}\". Check the spelling or use a different word or phrase.",
+      "results_with_count": {
+        "one": "{{ count }} result for \"{{ terms }}\"",
+        "other": "{{ count }} results for \"{{ terms }}\""
+      }
+    }
+  },
+  "newsletter": {
+    "success": "Thanks for subscribing",
+    "email_placeholder": "Email",
+    "button_label": "Subscribe"
+  },
+  "customer": {
+    "log_out": "Log out",
+    "login_page": {
+      "title": "Login",
+      "email": "Email",
+      "password": "Password",
+      "forgot_password": "Forgot your password?",
+      "sign_in": "Sign in",
+      "guest_continue": "Continue as guest",
+      "create_account": "Create account"
+    },
+    "recover_password": {
+      "title": "Reset your password",
+      "submit": "Submit",
+      "success": "We've sent you an email with a link to update your password."
+    },
+    "register": {
+      "title": "Create account",
+      "first_name": "First name",
+      "last_name": "Last name",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Create",
+      "return": "Return to login"
+    },
+    "account": {
+      "title": "My account",
+      "details": "Account details",
+      "view_addresses": "View addresses",
+      "return": "Return to account details"
+    },
+    "orders": {
+      "title": "Order history",
+      "order_number": "Order",
+      "date": "Date",
+      "payment_status": "Payment status",
+      "fulfillment_status": "Fulfillment status",
+      "total": "Total",
+      "none": "You haven't placed any orders yet."
+    },
+    "order": {
+      "title": "Order {{ name }}",
+      "date_html": "Placed on {{ date }}",
+      "product": "Product",
+      "sku": "SKU",
+      "price": "Price",
+      "quantity": "Quantity",
+      "total": "Total",
+      "subtotal": "Subtotal",
+      "shipping": "Shipping",
+      "billing_address": "Billing address",
+      "shipping_address": "Shipping address"
+    },
+    "addresses": {
+      "title": "Addresses",
+      "add_new": "Add a new address",
+      "first_name": "First name",
+      "last_name": "Last name",
+      "company": "Company",
+      "address1": "Address 1",
+      "address2": "Address 2",
+      "city": "City",
+      "country": "Country/region",
+      "province": "Province",
+      "zip": "Postal/ZIP code",
+      "phone": "Phone",
+      "add": "Add address",
+      "update": "Update address",
+      "edit": "Edit",
+      "delete": "Delete",
+      "delete_confirm": "Are you sure you want to delete this address?",
+      "default": "Default",
+      "return": "Return to account details"
+    },
+    "reset_password": {
+      "title": "Reset account password",
+      "subtext": "Enter a new password.",
+      "password": "Password",
+      "password_confirm": "Confirm password",
+      "submit": "Reset password"
+    },
+    "activate_account": {
+      "title": "Activate account",
+      "subtext": "Create your password to activate your account.",
+      "password": "Password",
+      "password_confirm": "Confirm password",
+      "submit": "Activate account",
+      "cancel": "Decline invitation"
+    }
+  }
+}

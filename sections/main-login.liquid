@@ -1,0 +1,46 @@
+<div class="customer login section page-width color-{{ section.settings.color_scheme }}">
+  <h1>{{ 'customer.login_page.title' | t }}</h1>
+
+  {%- form 'customer_login', novalidate: 'novalidate' -%}
+    {%- if form.errors -%}
+      <p class="form__message form__message--error">{{ form.errors | default_errors }}</p>
+    {%- endif -%}
+    <div class="field">
+      <label for="CustomerEmail">{{ 'customer.login_page.email' | t }}</label>
+      <input type="email" name="customer[email]" id="CustomerEmail" autocomplete="email" required>
+    </div>
+    {%- if form.password_needed -%}
+      <div class="field">
+        <label for="CustomerPassword">{{ 'customer.login_page.password' | t }}</label>
+        <input type="password" name="customer[password]" id="CustomerPassword" autocomplete="current-password" required>
+      </div>
+      <a href="#recover" onclick="document.getElementById('RecoverPassword').removeAttribute('hidden');return false;">{{ 'customer.login_page.forgot_password' | t }}</a>
+    {%- endif -%}
+    <button type="submit" class="button">{{ 'customer.login_page.sign_in' | t }}</button>
+  {%- endform -%}
+
+  <div id="RecoverPassword" hidden>
+    <h2>{{ 'customer.recover_password.title' | t }}</h2>
+    {%- form 'recover_customer_password' -%}
+      {%- if form.posted_successfully? -%}
+        <p class="form__message form__message--success">{{ 'customer.recover_password.success' | t }}</p>
+      {%- endif -%}
+      <div class="field">
+        <label for="RecoverEmail">{{ 'customer.login_page.email' | t }}</label>
+        <input type="email" name="email" id="RecoverEmail" autocomplete="email" required>
+      </div>
+      <button type="submit" class="button">{{ 'customer.recover_password.submit' | t }}</button>
+    {%- endform -%}
+  </div>
+
+  {%- if shop.checkout.guest_login -%}
+    {%- form 'guest_login' -%}
+      <button type="submit" class="button button--secondary">{{ 'customer.login_page.guest_continue' | t }}</button>
+    {%- endform -%}
+  {%- endif -%}
+
+  <p><a href="{{ routes.account_register_url }}">{{ 'customer.login_page.create_account' | t }}</a></p>
+</div>
+{% schema %}
+{ "name": "Login", "settings": [ { "type": "color_scheme", "id": "color_scheme", "default": "scheme-1", "label": "Color scheme" } ] }
+{% endschema %}

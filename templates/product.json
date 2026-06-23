@@ -1,0 +1,17 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "title": { "type": "title" },
+        "price": { "type": "price" },
+        "variant_picker": { "type": "variant_picker" },
+        "buy_buttons": { "type": "buy_buttons", "settings": { "show_dynamic_checkout": true } },
+        "description": { "type": "description" }
+      },
+      "block_order": ["title", "price", "variant_picker", "buy_buttons", "description"],
+      "settings": { "color_scheme": "scheme-1" }
+    }
+  },
+  "order": ["main"]
+}

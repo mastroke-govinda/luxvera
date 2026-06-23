@@ -1,0 +1,54 @@
+{%- if settings.predictive_search_enabled -%}
+  {{ 'predictive-search.js' | asset_url | script_tag }}
+{%- endif -%}
+
+<header class="header section page-width color-{{ section.settings.color_scheme }}" role="banner">
+  <div class="header__inner">
+    {%- if section.settings.logo != blank -%}
+      <a href="{{ routes.root_url }}" class="header__logo">
+        {{ section.settings.logo | image_url: width: 300 | image_tag: alt: shop.name | escape }}
+      </a>
+    {%- else -%}
+      <a href="{{ routes.root_url }}" class="header__logo header__logo--text">{{ shop.name }}</a>
+    {%- endif -%}
+
+    <nav class="header__nav" role="navigation">
+      <ul class="header__menu" role="list">
+        {%- for link in section.settings.menu.links -%}
+          <li><a href="{{ link.url }}" {% if link.active %}aria-current="page"{% endif %}>{{ link.title | escape }}</a></li>
+        {%- endfor -%}
+      </ul>
+    </nav>
+
+    <div class="header__icons">
+      {%- if settings.predictive_search_enabled -%}
+        <predictive-search class="header__search">
+          <form action="{{ routes.search_url }}" method="get" role="search">
+            <input type="search" name="q" value="{{ search.terms | escape }}" placeholder="{{ 'general.search.placeholder' | t }}" aria-label="{{ 'general.search.search' | t }}" autocomplete="off">
+            <input type="hidden" name="options[prefix]" value="last">
+            <button type="submit" aria-label="{{ 'general.search.search' | t }}">{% render 'icon-search' %}</button>
+          </form>
+          <div class="predictive-search" data-predictive-search tabindex="-1"></div>
+        </predictive-search>
+      {%- else -%}
+        <a href="{{ routes.search_url }}" class="header__icon" aria-label="{{ 'general.search.search' | t }}">{% render 'icon-search' %}</a>
+      {%- endif -%}
+
+      {%- if shop.customer_accounts_enabled -%}
+        <a href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}{% endif %}" class="header__icon" aria-label="{{ 'customer.account.title' | t }}">{% render 'icon-account' %}</a>
+      {%- endif -%}
+
+      {% render 'cart-icon-bubble' %}
+    </div>
+  </div>
+</header>
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    { "type": "image_picker", "id": "logo", "label": "Logo" },
+    { "type": "link_list", "id": "menu", "default": "main-menu", "label": "Menu" },
+    { "type": "color_scheme", "id": "color_scheme", "default": "scheme-1", "label": "Color scheme" }
+  ]
+}
+{% endschema %}

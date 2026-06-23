@@ -1,0 +1,13 @@
+{
+  "type": "header",
+  "name": "Header group",
+  "sections": {
+    "header": {
+      "type": "header",
+      "settings": {
+        "color_scheme": "scheme-1"
+      }
+    }
+  },
+  "order": ["header"]
+}

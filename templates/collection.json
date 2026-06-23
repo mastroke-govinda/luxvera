@@ -1,0 +1,18 @@
+{
+  "sections": {
+    "banner": {
+      "type": "main-collection-banner",
+      "settings": { "show_description": true, "color_scheme": "scheme-1" }
+    },
+    "product-grid": {
+      "type": "main-collection-product-grid",
+      "settings": {
+        "products_per_page": 16,
+        "columns_desktop": 4,
+        "enable_filtering": true,
+        "enable_sorting": true
+      }
+    }
+  },
+  "order": ["banner", "product-grid"]
+}

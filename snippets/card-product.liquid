@@ -1,0 +1,31 @@
+{%- comment -%} Minimal, restyleable product card. Pass: card_product, media_aspect_ratio {%- endcomment -%}
+{%- if card_product and card_product != empty -%}
+  <div class="card-wrapper">
+    <div class="card card--product color-{{ settings.card_color_scheme }}">
+      <div class="card__media">
+        <a href="{{ card_product.url }}" aria-hidden="true" tabindex="-1">
+          {%- if card_product.featured_media -%}
+            {{ card_product.featured_media | image_url: width: 600 | image_tag:
+              loading: 'lazy',
+              widths: '165,330,535,720',
+              sizes: '(min-width: 990px) 25vw, 50vw',
+              alt: card_product.featured_media.alt | escape
+            }}
+          {%- else -%}
+            {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+          {%- endif -%}
+        </a>
+      </div>
+      <div class="card__content">
+        <h3 class="card__heading">
+          <a href="{{ card_product.url }}" class="full-unstyled-link">{{ card_product.title | escape }}</a>
+        </h3>
+        {%- if settings.show_vendor -%}<div class="card__vendor">{{ card_product.vendor }}</div>{%- endif -%}
+        {% render 'price', product: card_product, use_variant: true %}
+        {%- unless card_product.available -%}
+          <span class="badge">{{ 'products.product.sold_out' | t }}</span>
+        {%- endunless -%}
+      </div>
+    </div>
+  </div>
+{%- endif -%}

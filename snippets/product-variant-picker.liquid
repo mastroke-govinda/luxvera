@@ -1,0 +1,56 @@
+{%- comment -%}
+  Renders variant option selectors and the variant data JSON consumed by variant-selects.
+  Accepts: product, block, product_form_id, section_id
+{%- endcomment -%}
+<variant-selects
+  id="variant-selects-{{ section_id }}"
+  data-section="{{ section_id }}"
+  data-url="{{ product.url }}"
+>
+  {%- for option in product.options_with_values -%}
+    {%- liquid
+      assign option_disabled = true
+      for value in option.values
+        if value.variant.available
+          assign option_disabled = false
+          break
+        endif
+      endfor
+    -%}
+    <fieldset class="js product-form__input">
+      <legend class="form__label">{{ option.name }}</legend>
+      {%- for value in option.values -%}
+        {%- liquid
+          assign input_id = section_id | append: '-' | append: option.position | append: '-' | append: forloop.index0
+        -%}
+        <input
+          type="radio"
+          id="{{ input_id }}"
+          name="{{ option.name }}"
+          value="{{ value | escape }}"
+          form="product-form-{{ section_id }}"
+          {% if option.selected_value == value %}checked{% endif %}
+        >
+        <label for="{{ input_id }}">{{ value }}</label>
+      {%- endfor -%}
+    </fieldset>
+  {%- endfor -%}
+
+  <script type="application/json">
+    {{ product.variants | json }}
+  </script>
+</variant-selects>
+
+<noscript>
+  <select name="id" form="product-form-{{ section_id }}" class="product-form__variants no-js">
+    {%- for variant in product.variants -%}
+      <option
+        {% if variant == product.selected_or_first_available_variant %}selected{% endif %}
+        {% unless variant.available %}disabled{% endunless %}
+        value="{{ variant.id }}"
+      >
+        {{ variant.title }} - {{ variant.price | money }}
+      </option>
+    {%- endfor -%}
+  </select>
+</noscript>

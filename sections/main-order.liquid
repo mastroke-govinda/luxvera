@@ -1,0 +1,40 @@
+<div class="customer order section page-width color-{{ section.settings.color_scheme }}">
+  <h1>{{ 'customer.order.title' | t: name: order.name }}</h1>
+  <p>{{ 'customer.order.date_html' | t: date: order.created_at | date: format: 'date' }}</p>
+
+  <table>
+    <thead><tr>
+      <th>{{ 'customer.order.product' | t }}</th>
+      <th>{{ 'customer.order.sku' | t }}</th>
+      <th>{{ 'customer.order.price' | t }}</th>
+      <th>{{ 'customer.order.quantity' | t }}</th>
+      <th>{{ 'customer.order.total' | t }}</th>
+    </tr></thead>
+    <tbody>
+      {%- for line_item in order.line_items -%}
+        <tr>
+          <td><a href="{{ line_item.product.url }}">{{ line_item.title | escape }}</a></td>
+          <td>{{ line_item.sku }}</td>
+          <td>{{ line_item.price | money }}</td>
+          <td>{{ line_item.quantity }}</td>
+          <td>{{ line_item.final_line_price | money }}</td>
+        </tr>
+      {%- endfor -%}
+    </tbody>
+    <tfoot>
+      <tr><td colspan="4">{{ 'customer.order.subtotal' | t }}</td><td>{{ order.line_items_subtotal_price | money }}</td></tr>
+      {%- for shipping_method in order.shipping_methods -%}
+        <tr><td colspan="4">{{ 'customer.order.shipping' | t }} ({{ shipping_method.title }})</td><td>{{ shipping_method.price | money }}</td></tr>
+      {%- endfor -%}
+      <tr><td colspan="4">{{ 'customer.order.total' | t }}</td><td>{{ order.total_net_amount | money_with_currency }}</td></tr>
+    </tfoot>
+  </table>
+
+  <h2>{{ 'customer.order.billing_address' | t }}</h2>
+  <div class="rte">{{ order.billing_address | format_address }}</div>
+  <h2>{{ 'customer.order.shipping_address' | t }}</h2>
+  <div class="rte">{{ order.shipping_address | format_address }}</div>
+</div>
+{% schema %}
+{ "name": "Order", "settings": [ { "type": "color_scheme", "id": "color_scheme", "default": "scheme-1", "label": "Color scheme" } ] }
+{% endschema %}

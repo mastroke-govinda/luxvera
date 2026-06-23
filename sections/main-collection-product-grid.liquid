@@ -1,0 +1,84 @@
+{{ 'facets.js' | asset_url | script_tag }}
+
+<div class="section page-width">
+  <div class="collection-toolbar">
+    {%- if section.settings.enable_filtering or section.settings.enable_sorting -%}
+      <aside class="facets-wrapper" aria-label="{{ 'products.facets.filter_and_sort' | t }}">
+        {% render 'facets', results: collection, enable_sorting: section.settings.enable_sorting %}
+      </aside>
+    {%- endif -%}
+    <div id="ProductCountDesktop" class="product-count">
+      {{ 'products.facets.product_count' | t: product_count: collection.products_count, count: collection.all_products_count }}
+    </div>
+  </div>
+
+  <div id="ProductGridContainer">
+    {%- paginate collection.products by section.settings.products_per_page -%}
+      {%- if collection.products.size == 0 -%}
+        <div class="collection--empty">
+          <p>{{ 'sections.collection_template.empty' | t }}</p>
+          <a href="{{ routes.all_products_collection_url }}">{{ 'sections.collection_template.use_fewer_filters_html' | t }}</a>
+        </div>
+      {%- else -%}
+        <ul
+          id="product-grid"
+          data-id="{{ section.id }}"
+          class="grid grid--{{ section.settings.columns_desktop }}-col product-grid"
+          role="list"
+        >
+          {%- for product in collection.products -%}
+            <li class="grid__item">
+              {% render 'card-product', card_product: product %}
+            </li>
+          {%- endfor -%}
+        </ul>
+
+        {% render 'pagination', paginate: paginate %}
+      {%- endif -%}
+    {%- endpaginate -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Product grid",
+  "class": "section-collection",
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "default": 16,
+      "label": "Products per page"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 4,
+      "label": "Columns on desktop"
+    },
+    {
+      "type": "header",
+      "content": "Filtering and sorting"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_filtering",
+      "default": true,
+      "label": "Enable filtering",
+      "info": "Customize filters with the [Search & Discovery app](https://apps.shopify.com/search-and-discovery)"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sorting",
+      "default": true,
+      "label": "Enable sorting"
+    }
+  ]
+}
+{% endschema %}

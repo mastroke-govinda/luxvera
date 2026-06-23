@@ -1,0 +1,32 @@
+<div id="main-cart-footer" data-id="{{ section.id }}" class="cart-footer section page-width{% if cart == empty %} is-empty{% endif %}">
+  <div class="js-contents">
+    {%- if cart != empty -%}
+      {%- if settings.show_cart_note -%}
+        <cart-note class="cart-note">
+          <label for="Cart-note">{{ 'sections.cart.note' | t }}</label>
+          <textarea id="Cart-note" name="note" form="cart">{{ cart.note }}</textarea>
+        </cart-note>
+      {%- endif -%}
+
+      <div class="cart__totals">
+        <div class="cart__subtotal">
+          <span>{{ 'sections.cart.subtotal' | t }}</span>
+          <span>{{ cart.total_price | money_with_currency }}</span>
+        </div>
+        <small class="cart__tax">{{ 'sections.cart.taxes_and_shipping_at_checkout' | t }}</small>
+      </div>
+
+      <div class="cart__ctas">
+        <button type="submit" id="checkout" class="button button--full-width" name="checkout" form="cart"{% if cart == empty %} disabled{% endif %}>
+          {{ 'sections.cart.checkout' | t }}
+        </button>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+{% schema %}
+{
+  "name": "Cart footer",
+  "settings": []
+}
+{% endschema %}

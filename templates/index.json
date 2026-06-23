@@ -1,0 +1,9 @@
+{
+  "sections": {
+    "newsletter": {
+      "type": "newsletter",
+      "settings": { "color_scheme": "scheme-1" }
+    }
+  },
+  "order": ["newsletter"]
+}

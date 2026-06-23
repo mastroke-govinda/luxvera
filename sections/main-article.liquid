@@ -1,0 +1,33 @@
+<article class="article section page-width">
+  <h1>{{ article.title | escape }}</h1>
+  <p class="article__meta">{{ article.published_at | date: format: 'date' }} &middot; {{ article.author }}</p>
+  {%- if article.image -%}
+    <div class="article__image">{{ article.image | image_url: width: 1200 | image_tag: alt: article.title | escape }}</div>
+  {%- endif -%}
+  <div class="article__content rte">{{ article.content }}</div>
+
+  {%- if blog.comments_enabled? -%}
+    <div id="comments" class="article__comments">
+      {%- if article.comments_count > 0 -%}
+        {%- for comment in article.comments -%}
+          <div class="comment"><div class="rte">{{ comment.content }}</div><cite>{{ comment.author }}</cite></div>
+        {%- endfor -%}
+      {%- endif -%}
+
+      {%- form 'new_comment', article -%}
+        {%- if form.errors -%}
+          <p class="form__message form__message--error">{{ 'general.comment_form.error' | t }}</p>
+        {%- elsif form.posted_successfully? -%}
+          <p class="form__message form__message--success">{{ 'general.comment_form.success' | t }}</p>
+        {%- endif -%}
+        <div class="field"><input type="text" name="comment[author]" placeholder="{{ 'general.comment_form.name' | t }}" required></div>
+        <div class="field"><input type="email" name="comment[email]" placeholder="{{ 'general.comment_form.email' | t }}" required></div>
+        <div class="field"><textarea name="comment[body]" placeholder="{{ 'general.comment_form.message' | t }}" required></textarea></div>
+        <button type="submit" class="button">{{ 'general.comment_form.post' | t }}</button>
+      {%- endform -%}
+    </div>
+  {%- endif -%}
+</article>
+{% schema %}
+{ "name": "Article", "settings": [] }
+{% endschema %}

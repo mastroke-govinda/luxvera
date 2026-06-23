@@ -1,0 +1,80 @@
+{%- comment -%}
+  Full cart drawer. Rendered once in theme.liquid and re-rendered via the
+  Section Rendering API (sections/cart-drawer.liquid) on add / update.
+  The inner #CartDrawer is what gets swapped.
+{%- endcomment -%}
+<cart-drawer class="color-{{ settings.cart_color_scheme }}{% if cart == empty %} is-empty{% endif %}">
+  <div class="cart-drawer__overlay" tabindex="-1"></div>
+  <div id="CartDrawer" class="cart-drawer__inner" role="dialog" aria-modal="true" aria-label="{{ 'sections.cart.title' | t }}">
+    <div class="cart-drawer__header">
+      <h2 class="cart-drawer__heading">{{ 'sections.cart.title' | t }}</h2>
+      <button class="drawer__close" type="button" onclick="this.closest('cart-drawer').close()" aria-label="{{ 'accessibility.close' | t }}">
+        {% render 'icon-close' %}
+      </button>
+    </div>
+
+    {%- if cart == empty -%}
+      <div class="cart-drawer__empty">
+        <p>{{ 'sections.cart.empty' | t }}</p>
+        <a href="{{ routes.all_products_collection_url }}" class="button">{{ 'general.continue_shopping' | t }}</a>
+      </div>
+    {%- else -%}
+      <cart-drawer-items class="cart-drawer__items js-contents">
+        <p id="CartDrawer-LineItemStatus" class="visually-hidden" role="status"></p>
+        <form action="{{ routes.cart_url }}" method="post" id="CartDrawer-Form">
+          <ul class="cart-drawer__list" role="list">
+            {%- for item in cart.items -%}
+              <li id="CartDrawer-Item-{{ forloop.index }}" class="cart-item">
+                <div class="cart-item__media">
+                  {%- if item.image -%}
+                    <a href="{{ item.url }}">{{ item.image | image_url: width: 160 | image_tag: loading: 'lazy', alt: item.title | escape }}</a>
+                  {%- endif -%}
+                </div>
+                <div class="cart-item__details">
+                  <a href="{{ item.url }}" class="cart-item__name">{{ item.product.title | escape }}</a>
+                  {%- if settings.show_vendor -%}<p class="cart-item__vendor">{{ item.product.vendor }}</p>{%- endif -%}
+                  {%- unless item.product.has_only_default_variant -%}
+                    <p class="cart-item__variant">{{ item.variant.title }}</p>
+                  {%- endunless -%}
+                  <div class="cart-item__price">{{ item.final_line_price | money }}</div>
+                  <quantity-input class="quantity">
+                    <button class="quantity__button" name="minus" type="button"
+                      onclick="this.closest('quantity-input').querySelector('input').stepDown();this.closest('quantity-input').querySelector('input').dispatchEvent(new Event('change',{bubbles:true}))">−</button>
+                    <input class="quantity__input" type="number" name="updates[]" value="{{ item.quantity }}" min="0"
+                      data-index="{{ forloop.index }}" aria-label="{{ 'products.product.quantity.label' | t }}">
+                    <button class="quantity__button" name="plus" type="button"
+                      onclick="this.closest('quantity-input').querySelector('input').stepUp();this.closest('quantity-input').querySelector('input').dispatchEvent(new Event('change',{bubbles:true}))">+</button>
+                  </quantity-input>
+                  <cart-remove-button data-index="{{ forloop.index }}">
+                    <a href="{{ item.url_to_remove }}" class="cart-item__remove">{{ 'sections.cart.remove' | t }}</a>
+                  </cart-remove-button>
+                  <div id="CartDrawer-LineItemError-{{ forloop.index }}" class="cart-item__error" role="alert">
+                    <small class="cart-item__error-text"></small>
+                  </div>
+                </div>
+                {% render 'loading-spinner' %}
+              </li>
+            {%- endfor -%}
+          </ul>
+        </form>
+      </cart-drawer-items>
+
+      <div class="cart-drawer__footer">
+        {%- if settings.show_cart_note -%}
+          <cart-note class="cart-note">
+            <label for="CartDrawer-Note">{{ 'sections.cart.note' | t }}</label>
+            <textarea id="CartDrawer-Note" name="note" form="CartDrawer-Form">{{ cart.note }}</textarea>
+          </cart-note>
+        {%- endif -%}
+        <div class="cart-drawer__subtotal">
+          <span>{{ 'sections.cart.subtotal' | t }}</span>
+          <span>{{ cart.total_price | money_with_currency }}</span>
+        </div>
+        <small class="cart-drawer__tax">{{ 'sections.cart.taxes_and_shipping_at_checkout' | t }}</small>
+        <button type="submit" name="checkout" form="CartDrawer-Form" class="button button--full-width">
+          {{ 'sections.cart.checkout' | t }}
+        </button>
+      </div>
+    {%- endif -%}
+  </div>
+</cart-drawer>

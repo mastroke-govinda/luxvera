@@ -1,0 +1,32 @@
+<div class="list-collections section page-width">
+  <h1>{{ section.settings.title | escape }}</h1>
+  <ul class="grid grid--3-col" role="list">
+    {%- assign collections = collections | sort: section.settings.sort -%}
+    {%- for collection in collections -%}
+      <li class="grid__item">
+        <a href="{{ collection.url }}" class="collection-card">
+          {%- if collection.featured_image -%}
+            {{ collection.featured_image | image_url: width: 600 | image_tag: loading: 'lazy', alt: collection.title | escape }}
+          {%- endif -%}
+          <span class="collection-card__title">{{ collection.title | escape }}</span>
+        </a>
+      </li>
+    {%- endfor -%}
+  </ul>
+</div>
+{% schema %}
+{
+  "name": "Collections list",
+  "settings": [
+    { "type": "text", "id": "title", "default": "Collections", "label": "Heading" },
+    {
+      "type": "select", "id": "sort", "label": "Sort",
+      "options": [
+        { "value": "title", "label": "Alphabetically" },
+        { "value": "products_count", "label": "Product count" }
+      ],
+      "default": "title"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,101 @@
+{
+  "settings_schema": {
+    "colors": {
+      "name": "Colors",
+      "settings": {
+        "background": { "label": "Background" },
+        "background_gradient": { "label": "Background gradient", "info": "Replaces background where applicable." },
+        "text": { "label": "Text" },
+        "button": { "label": "Solid button background" },
+        "button_label": { "label": "Solid button label" },
+        "secondary_button_label": { "label": "Outline button label" },
+        "shadow": { "label": "Shadow" }
+      }
+    },
+    "typography": {
+      "name": "Typography",
+      "settings": {
+        "header__1": { "content": "Headings" },
+        "header__2": { "content": "Body" },
+        "type_header_font": { "label": "Font" },
+        "heading_scale": { "label": "Font size scale" },
+        "type_body_font": { "label": "Font" },
+        "body_scale": { "label": "Font size scale" }
+      }
+    },
+    "layout": {
+      "name": "Layout",
+      "settings": {
+        "page_width": { "label": "Page width" },
+        "spacing_sections": { "label": "Space between template sections" },
+        "header__grid": { "content": "Grid" },
+        "spacing_grid_horizontal": { "label": "Horizontal space" },
+        "spacing_grid_vertical": { "label": "Vertical space" }
+      }
+    },
+    "buttons": { "name": "Buttons" },
+    "cards": { "name": "Product cards" },
+    "media": {
+      "name": "Media",
+      "settings": {
+        "show_image_zoom": { "label": "Enable image zoom" }
+      }
+    },
+    "cart": {
+      "name": "Cart",
+      "settings": {
+        "cart_type": {
+          "label": "Cart type",
+          "drawer": { "label": "Drawer" },
+          "page": { "label": "Page" },
+          "both": { "label": "Drawer and page" }
+        },
+        "show_cart_note": { "label": "Enable cart note" },
+        "show_vendor": { "label": "Show vendor" }
+      }
+    },
+    "search_input": {
+      "name": "Search behavior",
+      "settings": {
+        "predictive_search_enabled": { "label": "Enable predictive search" },
+        "predictive_search_show_vendor": { "label": "Show product vendor" },
+        "predictive_search_show_price": { "label": "Show product price" }
+      }
+    },
+    "social": {
+      "name": "Social media",
+      "settings": {
+        "social_instagram_link": { "label": "Instagram", "info": "https://instagram.com/shopify" },
+        "social_facebook_link": { "label": "Facebook" },
+        "social_tiktok_link": { "label": "TikTok" },
+        "social_youtube_link": { "label": "YouTube" },
+        "social_x_link": { "label": "X" }
+      }
+    },
+    "favicon": {
+      "name": "Favicon",
+      "settings": {
+        "favicon": { "label": "Favicon image", "info": "Will be scaled down to 32 x 32px" }
+      }
+    },
+    "currency_format": {
+      "name": "Currency format",
+      "settings": {
+        "content": "Currency codes",
+        "currency_code_enabled": { "label": "Show currency codes" }
+      }
+    },
+    "global": {
+      "settings": {
+        "radius": { "label": "Corner radius" },
+        "thickness": { "label": "Border thickness" },
+        "color_scheme": { "label": "Color scheme" },
+        "style": {
+          "label": "Style",
+          "standard": { "label": "Standard" },
+          "card": { "label": "Card" }
+        }
+      }
+    }
+  }
+}

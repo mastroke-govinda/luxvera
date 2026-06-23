@@ -1,0 +1,52 @@
+<div class="customer addresses section page-width color-{{ section.settings.color_scheme }}">
+  <h1>{{ 'customer.addresses.title' | t }}</h1>
+  <a href="{{ routes.account_url }}">{{ 'customer.account.return' | t }}</a>
+
+  <h2>{{ 'customer.addresses.add_new' | t }}</h2>
+  {%- form 'customer_address', customer.new_address -%}
+    {%- if form.errors -%}<p class="form__message form__message--error">{{ form.errors | default_errors }}</p>{%- endif -%}
+    <div class="field"><label>{{ 'customer.addresses.first_name' | t }}</label><input type="text" name="address[first_name]" value="{{ form.first_name }}" autocomplete="given-name"></div>
+    <div class="field"><label>{{ 'customer.addresses.last_name' | t }}</label><input type="text" name="address[last_name]" value="{{ form.last_name }}" autocomplete="family-name"></div>
+    <div class="field"><label>{{ 'customer.addresses.company' | t }}</label><input type="text" name="address[company]" value="{{ form.company }}" autocomplete="organization"></div>
+    <div class="field"><label>{{ 'customer.addresses.address1' | t }}</label><input type="text" name="address[address1]" value="{{ form.address1 }}" autocomplete="address-line1"></div>
+    <div class="field"><label>{{ 'customer.addresses.address2' | t }}</label><input type="text" name="address[address2]" value="{{ form.address2 }}" autocomplete="address-line2"></div>
+    <div class="field"><label>{{ 'customer.addresses.city' | t }}</label><input type="text" name="address[city]" value="{{ form.city }}" autocomplete="address-level2"></div>
+    <div class="field"><label>{{ 'customer.addresses.country' | t }}</label>
+      <select name="address[country]" id="AddressCountryNew" data-default="{{ form.country }}">{{ all_country_option_tags }}</select>
+    </div>
+    <div class="field" id="AddressProvinceContainerNew"><label>{{ 'customer.addresses.province' | t }}</label>
+      <select name="address[province]" id="AddressProvinceNew" data-default="{{ form.province }}"></select>
+    </div>
+    <div class="field"><label>{{ 'customer.addresses.zip' | t }}</label><input type="text" name="address[zip]" value="{{ form.zip }}" autocomplete="postal-code"></div>
+    <div class="field"><label>{{ 'customer.addresses.phone' | t }}</label><input type="tel" name="address[phone]" value="{{ form.phone }}" autocomplete="tel"></div>
+    <button type="submit" class="button">{{ 'customer.addresses.add' | t }}</button>
+  {%- endform -%}
+
+  {%- paginate customer.addresses by 5 -%}
+    {%- for address in customer.addresses -%}
+      <div class="address-card">
+        {%- if address == customer.default_address -%}<span class="badge">{{ 'customer.addresses.default' | t }}</span>{%- endif -%}
+        <div class="rte">{{ address | format_address }}</div>
+        <a href="#EditAddress-{{ address.id }}" onclick="document.getElementById('EditAddress-{{ address.id }}').removeAttribute('hidden');return false;">{{ 'customer.addresses.edit' | t }}</a>
+
+        <div id="EditAddress-{{ address.id }}" hidden>
+          {%- form 'customer_address', address -%}
+            <div class="field"><input type="text" name="address[first_name]" value="{{ address.first_name }}" placeholder="{{ 'customer.addresses.first_name' | t }}"></div>
+            <div class="field"><input type="text" name="address[last_name]" value="{{ address.last_name }}" placeholder="{{ 'customer.addresses.last_name' | t }}"></div>
+            <div class="field"><input type="text" name="address[address1]" value="{{ address.address1 }}" placeholder="{{ 'customer.addresses.address1' | t }}"></div>
+            <div class="field"><input type="text" name="address[city]" value="{{ address.city }}" placeholder="{{ 'customer.addresses.city' | t }}"></div>
+            <div class="field"><input type="text" name="address[zip]" value="{{ address.zip }}" placeholder="{{ 'customer.addresses.zip' | t }}"></div>
+            <button type="submit" class="button">{{ 'customer.addresses.update' | t }}</button>
+          {%- endform -%}
+          {%- form 'customer_address', address, return_to: routes.account_addresses_url -%}
+            <button type="submit" name="_method" value="delete" class="link" onclick="return confirm('{{ 'customer.addresses.delete_confirm' | t }}')">{{ 'customer.addresses.delete' | t }}</button>
+          {%- endform -%}
+        </div>
+      </div>
+    {%- endfor -%}
+    {% render 'pagination', paginate: paginate %}
+  {%- endpaginate -%}
+</div>
+{% schema %}
+{ "name": "Addresses", "settings": [ { "type": "color_scheme", "id": "color_scheme", "default": "scheme-1", "label": "Color scheme" } ] }
+{% endschema %}

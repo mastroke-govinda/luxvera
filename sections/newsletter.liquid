@@ -1,0 +1,46 @@
+<div class="newsletter section page-width color-{{ section.settings.color_scheme }}">
+  {%- if section.settings.heading != blank -%}
+    <h2 class="newsletter__heading">{{ section.settings.heading | escape }}</h2>
+  {%- endif -%}
+  {%- if section.settings.subtext != blank -%}
+    <div class="newsletter__subtext rte">{{ section.settings.subtext }}</div>
+  {%- endif -%}
+
+  {%- form 'customer', class: 'newsletter__form' -%}
+    <input type="hidden" name="contact[tags]" value="newsletter">
+    {%- if form.posted_successfully? -%}
+      <p class="form__message form__message--success" tabindex="-1" autofocus>{{ 'newsletter.success' | t }}</p>
+    {%- else -%}
+      <div class="newsletter__field field">
+        <label class="visually-hidden" for="NewsletterEmail">{{ 'newsletter.email_placeholder' | t }}</label>
+        <input
+          id="NewsletterEmail"
+          type="email"
+          name="contact[email]"
+          class="field__input"
+          value="{{ form.email }}"
+          placeholder="{{ 'newsletter.email_placeholder' | t }}"
+          autocorrect="off"
+          autocapitalize="off"
+          autocomplete="email"
+          required
+        >
+        <button type="submit" name="commit" class="button">{{ 'newsletter.button_label' | t }}</button>
+      </div>
+      {%- if form.errors -%}
+        <p class="form__message form__message--error" tabindex="-1" autofocus>{{ form.errors.translated_fields.email | capitalize }} {{ form.errors.messages.email }}</p>
+      {%- endif -%}
+    {%- endif -%}
+  {%- endform -%}
+</div>
+{% schema %}
+{
+  "name": "Newsletter",
+  "settings": [
+    { "type": "text", "id": "heading", "default": "Subscribe to our newsletter", "label": "Heading" },
+    { "type": "richtext", "id": "subtext", "label": "Subtext" },
+    { "type": "color_scheme", "id": "color_scheme", "default": "scheme-1", "label": "Color scheme" }
+  ],
+  "presets": [ { "name": "Newsletter" } ]
+}
+{% endschema %}

@@ -1,0 +1,119 @@
+{{ 'product-info.js' | asset_url | script_tag }}
+{{ 'product-form.js' | asset_url | script_tag }}
+
+{%- liquid
+  assign product_form_id = 'product-form-' | append: section.id
+-%}
+
+<section class="product section page-width color-{{ section.settings.color_scheme }}" id="MainProduct-{{ section.id }}">
+  <div class="product__container">
+    <div class="product__media-wrapper">
+      {%- if product.featured_media -%}
+        <div class="product__media">
+          {{ product.featured_media | image_url: width: 1200 | image_tag:
+            loading: 'eager',
+            sizes: '(min-width: 750px) 50vw, 100vw',
+            widths: '350,550,750,1100,1500',
+            alt: product.featured_media.alt | escape
+          }}
+        </div>
+      {%- endif -%}
+      {%- if product.media.size > 1 -%}
+        <ul class="product__thumbnails" role="list">
+          {%- for media in product.media -%}
+            <li>{{ media | image_url: width: 200 | image_tag: loading: 'lazy', alt: media.alt | escape }}</li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+    </div>
+
+    <div class="product__info-wrapper">
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when '@app' -%}
+            {% render block %}
+
+          {%- when 'title' -%}
+            <h1 class="product__title" {{ block.shopify_attributes }}>{{ product.title | escape }}</h1>
+
+          {%- when 'vendor' -%}
+            <div class="product__vendor" {{ block.shopify_attributes }}>{{ product.vendor }}</div>
+
+          {%- when 'price' -%}
+            <div id="price-{{ section.id }}" class="product__price" {{ block.shopify_attributes }}>
+              {% render 'price', product: product, use_variant: true %}
+            </div>
+
+          {%- when 'variant_picker' -%}
+            <div {{ block.shopify_attributes }}>
+              {% render 'product-variant-picker', product: product, product_form_id: product_form_id, section_id: section.id %}
+            </div>
+
+          {%- when 'buy_buttons' -%}
+            <div {{ block.shopify_attributes }}>
+              {% render 'buy-buttons',
+                product: product,
+                product_form_id: product_form_id,
+                section_id: section.id,
+                show_dynamic_checkout: block.settings.show_dynamic_checkout
+              %}
+            </div>
+
+          {%- when 'description' -%}
+            <div class="product__description rte" {{ block.shopify_attributes }}>{{ product.description }}</div>
+
+          {%- when 'inventory' -%}
+            <div id="Inventory-{{ section.id }}" class="product__inventory" {{ block.shopify_attributes }}>
+              {%- assign current_variant = product.selected_or_first_available_variant -%}
+              {%- if current_variant.inventory_management == 'shopify' and current_variant.inventory_quantity > 0 -%}
+                {{ 'products.product.inventory_in_stock' | t }}
+              {%- elsif current_variant.available -%}
+                {{ 'products.product.inventory_in_stock' | t }}
+              {%- else -%}
+                {{ 'products.product.inventory_out_of_stock' | t }}
+              {%- endif -%}
+            </div>
+        {%- endcase -%}
+      {%- endfor -%}
+    </div>
+  </div>
+
+  <script type="application/ld+json">{{ product | structured_data }}</script>
+</section>
+
+{% schema %}
+{
+  "name": "Product information",
+  "tag": "section",
+  "blocks": [
+    { "type": "title", "name": "Title", "limit": 1 },
+    { "type": "vendor", "name": "Vendor", "limit": 1 },
+    { "type": "price", "name": "Price", "limit": 1 },
+    { "type": "variant_picker", "name": "Variant picker", "limit": 1 },
+    {
+      "type": "buy_buttons", "name": "Buy buttons", "limit": 1,
+      "settings": [
+        { "type": "checkbox", "id": "show_dynamic_checkout", "default": true, "label": "Show dynamic checkout buttons" }
+      ]
+    },
+    { "type": "inventory", "name": "Inventory status", "limit": 1 },
+    { "type": "description", "name": "Description", "limit": 1 },
+    { "type": "@app" }
+  ],
+  "settings": [
+    { "type": "color_scheme", "id": "color_scheme", "default": "scheme-1", "label": "Color scheme" }
+  ],
+  "presets": [
+    {
+      "name": "Product information",
+      "blocks": [
+        { "type": "title" },
+        { "type": "price" },
+        { "type": "variant_picker" },
+        { "type": "buy_buttons" },
+        { "type": "description" }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,27 @@
+<div class="blog section page-width">
+  <h1>{{ blog.title | escape }}</h1>
+  <ul class="grid grid--3-col" role="list">
+    {%- for article in blog.articles -%}
+      <li class="grid__item">
+        <article>
+          <a href="{{ article.url }}">
+            {%- if article.image -%}{{ article.image | image_url: width: 600 | image_tag: loading: 'lazy', alt: article.title | escape }}{%- endif -%}
+            <h2>{{ article.title | escape }}</h2>
+          </a>
+          {%- if section.settings.show_excerpt and article.excerpt.size > 0 -%}
+            <div class="rte">{{ article.excerpt }}</div>
+          {%- endif -%}
+        </article>
+      </li>
+    {%- endfor -%}
+  </ul>
+  {% paginate blog.articles by 12 %}{% render 'pagination', paginate: paginate %}{% endpaginate %}
+</div>
+{% schema %}
+{
+  "name": "Blog posts",
+  "settings": [
+    { "type": "checkbox", "id": "show_excerpt", "default": true, "label": "Show excerpt" }
+  ]
+}
+{% endschema %}

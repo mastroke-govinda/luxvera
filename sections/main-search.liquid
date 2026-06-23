@@ -1,0 +1,53 @@
+{{ 'facets.js' | asset_url | script_tag }}
+
+<div class="search section page-width">
+  <h1>{{ 'templates.search.title' | t }}</h1>
+
+  <form action="{{ routes.search_url }}" method="get" role="search" class="search__form">
+    <input type="search" name="q" value="{{ search.terms | escape }}" placeholder="{{ 'general.search.placeholder' | t }}" aria-label="{{ 'general.search.search' | t }}">
+    <input type="hidden" name="options[prefix]" value="last">
+    <button type="submit" class="button">{{ 'general.search.search' | t }}</button>
+  </form>
+
+  {%- if search.performed -%}
+    {%- if search.filters != empty -%}
+      <aside class="facets-wrapper" aria-label="{{ 'products.facets.filter_and_sort' | t }}">
+        {% render 'facets', results: search, enable_sorting: true %}
+      </aside>
+    {%- endif -%}
+
+    <div id="ProductCountDesktop" class="product-count">
+      {{ 'templates.search.results_with_count' | t: terms: search.terms, count: search.results_count }}
+    </div>
+
+    <div id="ProductGridContainer">
+      {%- paginate search.results by section.settings.results_per_page -%}
+        {%- if search.results.size == 0 -%}
+          <p>{{ 'templates.search.no_results' | t: terms: search.terms }}</p>
+        {%- else -%}
+          <ul id="product-grid" data-id="{{ section.id }}" class="grid grid--{{ section.settings.columns_desktop }}-col" role="list">
+            {%- for item in search.results -%}
+              <li class="grid__item">
+                {%- if item.object_type == 'product' -%}
+                  {% render 'card-product', card_product: item %}
+                {%- else -%}
+                  <a href="{{ item.url }}" class="search-result">{{ item.title | escape }}</a>
+                {%- endif -%}
+              </li>
+            {%- endfor -%}
+          </ul>
+          {% render 'pagination', paginate: paginate %}
+        {%- endif -%}
+      {%- endpaginate -%}
+    </div>
+  {%- endif -%}
+</div>
+{% schema %}
+{
+  "name": "Search results",
+  "settings": [
+    { "type": "range", "id": "results_per_page", "min": 8, "max": 48, "step": 4, "default": 16, "label": "Results per page" },
+    { "type": "range", "id": "columns_desktop", "min": 2, "max": 4, "step": 1, "default": 4, "label": "Columns on desktop" }
+  ]
+}
+{% endschema %}

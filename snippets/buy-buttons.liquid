@@ -1,0 +1,70 @@
+{%- comment -%}
+  Accepts: product, product_form_id, section_id, show_dynamic_checkout
+{%- endcomment -%}
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
+  assign cart_is_drawer = false
+  if settings.cart_type == 'drawer' or settings.cart_type == 'both'
+    assign cart_is_drawer = true
+  endif
+-%}
+<div class="product-form">
+  <div class="product-form__error-message-wrapper" role="alert" hidden>
+    <span class="product-form__error-message"></span>
+  </div>
+
+  <product-form data-cart-drawer="{{ cart_is_drawer }}">
+    {%- form 'product',
+      product,
+      id: product_form_id,
+      class: 'form',
+      novalidate: 'novalidate',
+      data-type: 'add-to-cart-form'
+    -%}
+      <input type="hidden" name="id" value="{{ current_variant.id }}" {% if current_variant.available == false %}disabled{% endif %}>
+
+      <div class="product-form__quantity">
+        <label class="form__label" for="Quantity-{{ section_id }}">{{ 'products.product.quantity.label' | t }}</label>
+        <quantity-input class="quantity">
+          <button class="quantity__button" name="minus" type="button">
+            <span class="visually-hidden">{{ 'products.product.quantity.decrease' | t: product: product.title | escape }}</span>−
+          </button>
+          <input
+            class="quantity__input"
+            type="number"
+            name="quantity"
+            id="Quantity-{{ section_id }}"
+            min="1"
+            value="1"
+            form="{{ product_form_id }}"
+          >
+          <button class="quantity__button" name="plus" type="button">
+            <span class="visually-hidden">{{ 'products.product.quantity.increase' | t: product: product.title | escape }}</span>+
+          </button>
+        </quantity-input>
+      </div>
+
+      <div class="product-form__buttons">
+        <button
+          type="submit"
+          name="add"
+          class="product-form__submit button button--full-width button--primary"
+          {% if current_variant.available == false %}disabled{% endif %}
+        >
+          <span>
+            {%- if current_variant.available == false -%}
+              {{ 'products.product.sold_out' | t }}
+            {%- else -%}
+              {{ 'products.product.add_to_cart' | t }}
+            {%- endif -%}
+          </span>
+          {% render 'loading-spinner' %}
+        </button>
+
+        {%- if show_dynamic_checkout -%}
+          {{ form | payment_button }}
+        {%- endif -%}
+      </div>
+    {%- endform -%}
+  </product-form>
+</div>
