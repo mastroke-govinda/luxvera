@@ -19,7 +19,7 @@
 
 <hero-banner
   id="hero-banner-{{ section.id }}"
-  class="hero-banner"
+  class="hero-banner color-{{ section.settings.color_scheme }}"
   aria-label="{{ 'sections.hero_banner.aria_label' | t }}"
   data-autoplay="{{ section.settings.autoplay }}"
   data-speed="{{ section.settings.autoplay_speed | times: 1000 }}"
@@ -68,7 +68,7 @@
             <div class="hero-banner__overlay" aria-hidden="true"></div>
           </div>
 
-          <div class="hero-banner__content color-{{ section.settings.color_scheme }}">
+          <div class="hero-banner__content">
             {%- if block.settings.heading != blank -%}
               {%- if template.name == 'index' and is_first -%}
                 <h1 class="hero-banner__heading">{{ block.settings.heading | escape }}</h1>
@@ -142,7 +142,7 @@
           </div>
           <div class="hero-banner__overlay" aria-hidden="true" style="--slide-overlay-color:#100a04;--slide-overlay-opacity:0.5;"></div>
         </div>
-        <div class="hero-banner__content color-{{ section.settings.color_scheme }}">
+        <div class="hero-banner__content">
           <h2 class="hero-banner__heading">{{ 'sections.hero_banner.empty_heading' | t }}</h2>
           <p class="hero-banner__subtext">{{ 'sections.hero_banner.empty_subtext' | t }}</p>
         </div>

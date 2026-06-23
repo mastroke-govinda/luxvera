@@ -40,7 +40,7 @@ hero-banner {
 .hero-banner__bg {
   position: absolute;
   inset: 0;
-  background: rgb(var(--color-background, 17, 17, 17));
+  background: rgb(var(--color-background));
 }
 
 .hero-banner__img {
@@ -109,8 +109,9 @@ hero-banner {
   text-align: var(--hero-text-align, left);
 }
 
-/* Override color-scheme background — the slide image IS the background */
-.hero-banner__content[class*="color-scheme-"] {
+/* Override color-scheme background — the slide image IS the background.
+   Specificity (0,1,1) beats base.css [class*="color-scheme-"] at (0,1,0). */
+hero-banner[class*="color-scheme-"] {
   background: transparent;
 }
 
