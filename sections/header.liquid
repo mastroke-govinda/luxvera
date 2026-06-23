@@ -1,54 +1,216 @@
 {%- if settings.predictive_search_enabled -%}
   {{ 'predictive-search.js' | asset_url | script_tag }}
 {%- endif -%}
+{{ 'header.css' | asset_url | stylesheet_tag }}
+{{ 'header.js' | asset_url | script_tag }}
 
-<header class="header section page-width color-{{ section.settings.color_scheme }}" role="banner">
-  <div class="header__inner">
-    {%- if section.settings.logo != blank -%}
-      <a href="{{ routes.root_url }}" class="header__logo">
-        {{ section.settings.logo | image_url: width: 300 | image_tag: alt: shop.name | escape }}
-      </a>
-    {%- else -%}
-      <a href="{{ routes.root_url }}" class="header__logo header__logo--text">{{ shop.name }}</a>
-    {%- endif -%}
+{%- assign logo_alt = shop.name | escape -%}
 
-    <nav class="header__nav" role="navigation">
-      <ul class="header__menu" role="list">
-        {%- for link in section.settings.menu.links -%}
-          <li><a href="{{ link.url }}" {% if link.active %}aria-current="page"{% endif %}>{{ link.title | escape }}</a></li>
-        {%- endfor -%}
-      </ul>
-    </nav>
+<sticky-header
+  {% if section.settings.enable_sticky_header %}data-sticky{% endif %}
+  class="header-wrapper"
+>
+  <header class="header color-{{ section.settings.color_scheme }}" role="banner">
+    <div class="header__inner page-width">
 
-    <div class="header__icons">
-      {%- if settings.predictive_search_enabled -%}
-        <predictive-search class="header__search">
-          <form action="{{ routes.search_url }}" method="get" role="search">
-            <input type="search" name="q" value="{{ search.terms | escape }}" placeholder="{{ 'general.search.placeholder' | t }}" aria-label="{{ 'general.search.search' | t }}" autocomplete="off">
-            <input type="hidden" name="options[prefix]" value="last">
-            <button type="submit" aria-label="{{ 'general.search.search' | t }}">{% render 'icon-search' %}</button>
-          </form>
-          <div class="predictive-search" data-predictive-search tabindex="-1"></div>
-        </predictive-search>
+      {%- comment -%} ── Mobile hamburger ── {%- endcomment -%}
+      <header-drawer class="header__hamburger">
+        <details>
+          <summary
+            aria-expanded="false"
+            aria-label="{{ 'sections.header.open_menu' | t }}"
+          >
+            {%- render 'icon-hamburger' -%}
+          </summary>
+          <div
+            id="menu-drawer"
+            class="header__menu-drawer"
+            role="dialog"
+            aria-modal="true"
+            aria-label="{{ 'sections.header.menu' | t }}"
+          >
+            <div class="header__menu-drawer-header">
+              <button
+                class="header__menu-drawer-close"
+                aria-label="{{ 'accessibility.close' | t }}"
+              >
+                {%- render 'icon-close' -%}
+              </button>
+            </div>
+            <nav role="navigation" aria-label="{{ 'sections.header.menu' | t }}">
+              <ul class="header__mobile-nav" role="list">
+                {%- for link in section.settings.menu.links -%}
+                  <li>
+                    {%- if link.links != blank -%}
+                      <details>
+                        <summary class="header__mobile-nav-summary">
+                          {{- link.title | escape -}}
+                          {%- render 'icon-caret' -%}
+                        </summary>
+                        <ul class="header__mobile-subnav" role="list">
+                          {%- for child_link in link.links -%}
+                            <li>
+                              <a
+                                href="{{ child_link.url }}"
+                                {% if child_link.active %}aria-current="page"{% endif %}
+                              >{{ child_link.title | escape }}</a>
+                            </li>
+                          {%- endfor -%}
+                        </ul>
+                      </details>
+                    {%- else -%}
+                      <a
+                        href="{{ link.url }}"
+                        {% if link.active %}aria-current="page"{% endif %}
+                      >{{ link.title | escape }}</a>
+                    {%- endif -%}
+                  </li>
+                {%- endfor -%}
+              </ul>
+            </nav>
+          </div>
+        </details>
+      </header-drawer>
+
+      {%- comment -%} ── Logo ── {%- endcomment -%}
+      {%- if section.settings.logo != blank -%}
+        <a
+          href="{{ routes.root_url }}"
+          class="header__logo"
+          style="--header-logo-width: {{ section.settings.logo_width }}px"
+        >
+          {{-
+            section.settings.logo
+            | image_url: width: section.settings.logo_width
+            | image_tag: width: section.settings.logo_width, alt: logo_alt
+          -}}
+        </a>
       {%- else -%}
-        <a href="{{ routes.search_url }}" class="header__icon" aria-label="{{ 'general.search.search' | t }}">{% render 'icon-search' %}</a>
+        <a href="{{ routes.root_url }}" class="header__logo header__logo--text">
+          {{- shop.name -}}
+        </a>
       {%- endif -%}
 
-      {%- if shop.customer_accounts_enabled -%}
-        <a href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}{% endif %}" class="header__icon" aria-label="{{ 'customer.account.title' | t }}">{% render 'icon-account' %}</a>
-      {%- endif -%}
+      {%- comment -%} ── Desktop nav ── {%- endcomment -%}
+      <nav class="header__nav" role="navigation" aria-label="{{ 'sections.header.menu' | t }}">
+        <ul class="header__menu" role="list">
+          {%- for link in section.settings.menu.links -%}
+            <li class="header__menu-item">
+              {%- if link.links != blank -%}
+                <details-disclosure>
+                  <details>
+                    <summary class="header__menu-link">
+                      {{- link.title | escape -}}
+                      {%- render 'icon-caret' -%}
+                    </summary>
+                    <ul class="header__dropdown" role="list">
+                      {%- for child_link in link.links -%}
+                        <li>
+                          <a
+                            href="{{ child_link.url }}"
+                            {% if child_link.active %}aria-current="page"{% endif %}
+                          >{{ child_link.title | escape }}</a>
+                        </li>
+                      {%- endfor -%}
+                    </ul>
+                  </details>
+                </details-disclosure>
+              {%- else -%}
+                <a
+                  href="{{ link.url }}"
+                  class="header__menu-link"
+                  {% if link.active %}aria-current="page"{% endif %}
+                >{{ link.title | escape }}</a>
+              {%- endif -%}
+            </li>
+          {%- endfor -%}
+        </ul>
+      </nav>
 
-      {% render 'cart-icon-bubble' %}
+      {%- comment -%} ── Icons ── {%- endcomment -%}
+      <div class="header__icons">
+        {%- if settings.predictive_search_enabled -%}
+          <predictive-search class="header__search">
+            <form action="{{ routes.search_url }}" method="get" role="search">
+              <input
+                type="search"
+                name="q"
+                value="{{ search.terms | escape }}"
+                placeholder="{{ 'general.search.placeholder' | t }}"
+                aria-label="{{ 'general.search.search' | t }}"
+                autocomplete="off"
+              >
+              <input type="hidden" name="options[prefix]" value="last">
+              <button type="submit" aria-label="{{ 'general.search.search' | t }}">
+                {%- render 'icon-search' -%}
+              </button>
+            </form>
+            <div class="predictive-search" data-predictive-search tabindex="-1"></div>
+          </predictive-search>
+        {%- else -%}
+          <a
+            href="{{ routes.search_url }}"
+            class="header__icon"
+            aria-label="{{ 'general.search.search' | t }}"
+          >
+            {%- render 'icon-search' -%}
+          </a>
+        {%- endif -%}
+
+        {%- if shop.customer_accounts_enabled -%}
+          <a
+            href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}{% endif %}"
+            class="header__icon"
+            aria-label="{{ 'customer.account.title' | t }}"
+          >
+            {%- render 'icon-account' -%}
+          </a>
+        {%- endif -%}
+
+        {%- render 'cart-icon-bubble' -%}
+      </div>
+
     </div>
-  </div>
-</header>
+  </header>
+</sticky-header>
+
 {% schema %}
 {
-  "name": "Header",
+  "name": "t:sections.header.name",
   "settings": [
-    { "type": "image_picker", "id": "logo", "label": "Logo" },
-    { "type": "link_list", "id": "menu", "default": "main-menu", "label": "Menu" },
-    { "type": "color_scheme", "id": "color_scheme", "default": "scheme-1", "label": "Color scheme" }
+    {
+      "type": "checkbox",
+      "id": "enable_sticky_header",
+      "default": true,
+      "label": "t:sections.header.settings.enable_sticky_header.label"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "t:sections.header.settings.logo.label"
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "min": 50,
+      "max": 250,
+      "step": 10,
+      "default": 120,
+      "unit": "px",
+      "label": "t:sections.header.settings.logo_width.label"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "default": "main-menu",
+      "label": "t:sections.header.settings.menu.label"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "default": "scheme-1",
+      "label": "t:sections.header.settings.color_scheme.label"
+    }
   ]
 }
 {% endschema %}

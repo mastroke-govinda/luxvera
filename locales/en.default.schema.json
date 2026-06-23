@@ -1,4 +1,16 @@
 {
+  "sections": {
+    "header": {
+      "name": "Header",
+      "settings": {
+        "enable_sticky_header": { "label": "Enable sticky header" },
+        "logo": { "label": "Logo image" },
+        "logo_width": { "label": "Custom logo width" },
+        "menu": { "label": "Menu" },
+        "color_scheme": { "label": "Color scheme" }
+      }
+    }
+  },
   "settings_schema": {
     "colors": {
       "name": "Colors",

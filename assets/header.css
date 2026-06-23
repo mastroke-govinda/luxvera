@@ -1,0 +1,472 @@
+/* ============================================================
+   STICKY WRAPPER
+   ============================================================ */
+sticky-header {
+  display: block;
+}
+
+sticky-header[data-sticky] {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+/* ============================================================
+   HEADER BAR
+   ============================================================ */
+.header {
+  padding: 1.2rem 0;
+  border-bottom: 0.1rem solid rgba(var(--color-foreground), 0.08);
+  transition: box-shadow 0.2s ease;
+}
+
+sticky-header[data-sticky] .header.scrolled {
+  box-shadow: 0 0.2rem 1.2rem rgba(0, 0, 0, 0.1);
+}
+
+/* ============================================================
+   INNER GRID — logo | nav | icons
+   ============================================================ */
+.header__inner {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-areas: "logo nav icons";
+  align-items: center;
+  gap: 2rem;
+  min-height: 5.6rem;
+}
+
+@media screen and (max-width: 989px) {
+  .header__inner {
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas: "hamburger logo icons";
+  }
+}
+
+/* ============================================================
+   LOGO
+   ============================================================ */
+.header__logo {
+  grid-area: logo;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.header__logo img {
+  width: var(--header-logo-width, 12rem);
+  height: auto;
+  display: block;
+}
+
+/* ============================================================
+   DESKTOP NAV
+   ============================================================ */
+.header__nav {
+  grid-area: nav;
+  display: flex;
+  justify-content: center;
+}
+
+@media screen and (max-width: 989px) {
+  .header__nav {
+    display: none;
+  }
+}
+
+.header__menu {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.header__menu-item {
+  position: relative;
+}
+
+.header__menu-link {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.7rem 1.1rem;
+  font-size: 1.4rem;
+  font-weight: 500;
+  text-decoration: none;
+  color: inherit;
+  background: none;
+  border: none;
+  border-radius: var(--buttons-radius, 0.4rem);
+  cursor: pointer;
+  font-family: inherit;
+  transition: background var(--duration-default, 0.15s);
+  list-style: none;
+  white-space: nowrap;
+}
+
+.header__menu-link::-webkit-details-marker,
+.header__menu-link::marker {
+  display: none;
+}
+
+.header__menu-link:hover,
+.header__menu-link:focus-visible {
+  background: rgba(var(--color-foreground), 0.06);
+}
+
+.header__menu-link[aria-current="page"] {
+  font-weight: 700;
+}
+
+/* ============================================================
+   DESKTOP DROPDOWN
+   ============================================================ */
+.header__menu-item details {
+  position: relative;
+}
+
+.header__dropdown {
+  position: absolute;
+  top: calc(100% + 0.6rem);
+  left: 50%;
+  transform: translateX(-50%) translateY(-0.6rem);
+  min-width: 18rem;
+  background: rgb(var(--color-background));
+  border: 0.1rem solid rgba(var(--color-foreground), 0.12);
+  border-radius: var(--buttons-radius, 0.4rem);
+  box-shadow: 0 0.4rem 2rem rgba(0, 0, 0, 0.1);
+  list-style: none;
+  margin: 0;
+  padding: 0.6rem 0;
+  z-index: 10;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.header__menu-item details[open] .header__dropdown {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
+
+.header__dropdown a {
+  display: block;
+  padding: 0.9rem 1.6rem;
+  font-size: 1.4rem;
+  text-decoration: none;
+  color: inherit;
+  white-space: nowrap;
+  transition: background var(--duration-default, 0.15s);
+}
+
+.header__dropdown a:hover,
+.header__dropdown a:focus-visible {
+  background: rgba(var(--color-foreground), 0.06);
+}
+
+.header__dropdown a[aria-current="page"] {
+  font-weight: 700;
+}
+
+/* Caret rotation when open */
+.header__menu-link svg {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  transition: transform 0.15s ease;
+}
+
+details[open] > .header__menu-link svg {
+  transform: rotate(180deg);
+}
+
+/* ============================================================
+   ICONS ROW
+   ============================================================ */
+.header__icons {
+  grid-area: icons;
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.header__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 4rem;
+  height: 4rem;
+  border-radius: var(--buttons-radius, 0.4rem);
+  color: inherit;
+  text-decoration: none;
+  transition: background var(--duration-default, 0.15s);
+  position: relative;
+}
+
+.header__icon:hover,
+.header__icon:focus-visible {
+  background: rgba(var(--color-foreground), 0.06);
+}
+
+.header__icon svg {
+  width: 2rem;
+  height: 2rem;
+}
+
+/* Cart count bubble */
+.cart-count-bubble {
+  position: absolute;
+  top: 0.2rem;
+  right: 0.2rem;
+  min-width: 1.6rem;
+  height: 1.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.4rem;
+  border-radius: 10rem;
+  background: rgb(var(--color-button));
+  color: rgb(var(--color-button-text));
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* ============================================================
+   PREDICTIVE SEARCH
+   ============================================================ */
+.header__search {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.header__search form {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.header__search input[type="search"] {
+  min-height: 3.6rem;
+  padding: 0.6rem 1rem;
+  font-size: 1.4rem;
+  border-radius: var(--buttons-radius, 0.4rem);
+  width: 14rem;
+  transition: width var(--duration-default, 0.15s), outline 0.1s;
+}
+
+@media screen and (min-width: 990px) {
+  .header__search input[type="search"]:focus {
+    width: 22rem;
+  }
+}
+
+@media screen and (max-width: 989px) {
+  .header__search input[type="search"] {
+    width: 10rem;
+  }
+}
+
+.header__search button[type="submit"] {
+  background: none;
+  border: none;
+  padding: 0.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: inherit;
+}
+
+.header__search button[type="submit"] svg {
+  width: 1.8rem;
+  height: 1.8rem;
+}
+
+/* ============================================================
+   HAMBURGER BUTTON (mobile only)
+   ============================================================ */
+.header__hamburger {
+  grid-area: hamburger;
+  display: none;
+}
+
+@media screen and (max-width: 989px) {
+  .header__hamburger {
+    display: block;
+  }
+}
+
+.header__hamburger > details > summary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 4.4rem;
+  height: 4.4rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  list-style: none;
+  border-radius: var(--buttons-radius, 0.4rem);
+  transition: background var(--duration-default, 0.15s);
+  color: inherit;
+}
+
+.header__hamburger > details > summary::-webkit-details-marker,
+.header__hamburger > details > summary::marker {
+  display: none;
+}
+
+.header__hamburger > details > summary:hover {
+  background: rgba(var(--color-foreground), 0.06);
+}
+
+.header__hamburger > details > summary svg {
+  width: 2rem;
+  height: 2rem;
+}
+
+/* ============================================================
+   MOBILE MENU DRAWER
+   ============================================================ */
+.header__menu-drawer {
+  position: fixed;
+  inset: 0 auto 0 0;
+  width: min(32rem, 90vw);
+  height: 100%;
+  background: rgb(var(--color-background));
+  color: rgb(var(--color-foreground));
+  z-index: 200;
+  overflow-y: auto;
+  padding: 1.6rem 2rem 4rem;
+  transform: translateX(-100%);
+  transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow: 0.4rem 0 2rem rgba(0, 0, 0, 0.12);
+}
+
+.header__hamburger > details[open] .header__menu-drawer {
+  transform: translateX(0);
+}
+
+/* Backdrop — toggled via JS */
+.header__menu-drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 199;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.header__menu-drawer-overlay.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Drawer header row */
+.header__menu-drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-bottom: 2rem;
+}
+
+.header__menu-drawer-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 4rem;
+  height: 4rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  border-radius: var(--buttons-radius, 0.4rem);
+  color: inherit;
+  transition: background var(--duration-default, 0.15s);
+}
+
+.header__menu-drawer-close:hover {
+  background: rgba(var(--color-foreground), 0.06);
+}
+
+.header__menu-drawer-close svg {
+  width: 1.8rem;
+  height: 1.8rem;
+}
+
+/* Mobile nav list */
+.header__mobile-nav {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.header__mobile-nav > li {
+  border-bottom: 0.1rem solid rgba(var(--color-foreground), 0.08);
+}
+
+.header__mobile-nav > li > a,
+.header__mobile-nav-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 1.4rem 0;
+  font-size: 1.6rem;
+  text-decoration: none;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  list-style: none;
+}
+
+.header__mobile-nav-summary::-webkit-details-marker,
+.header__mobile-nav-summary::marker {
+  display: none;
+}
+
+.header__mobile-nav-summary svg {
+  width: 1.2rem;
+  height: 1.2rem;
+  flex-shrink: 0;
+  transition: transform 0.15s ease;
+}
+
+.header__mobile-nav details[open] > .header__mobile-nav-summary svg {
+  transform: rotate(180deg);
+}
+
+/* Mobile sub-list */
+.header__mobile-subnav {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 1rem 1.6rem;
+}
+
+.header__mobile-subnav a {
+  display: block;
+  padding: 0.9rem 0;
+  font-size: 1.4rem;
+  text-decoration: none;
+  color: inherit;
+  opacity: 0.8;
+}
+
+.header__mobile-subnav a:hover {
+  opacity: 1;
+}
+
+.header__mobile-subnav a[aria-current="page"] {
+  font-weight: 700;
+  opacity: 1;
+}
